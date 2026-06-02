@@ -1,0 +1,304 @@
+// CundiMarket - Plataforma de comercio y servicios de Cundinamarca
+// Esquema de datos (SQLite para piloto, migrable a PostgreSQL en producción).
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+/// Roles: CITIZEN | MERCHANT | ADMIN
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  phone        String?
+  passwordHash String
+  role         String   @default("CITIZEN")
+  municipality String   @default("Mosquera")
+  avatarUrl    String?
+  createdAt    DateTime @default(now())
+
+  businesses Business[]
+  properties Property[]
+  services   ServiceProvider[]
+  jobs       Job[]
+  ratings    Rating[]
+  reports    Report[]
+  favorites  Favorite[]
+  news       News[]
+  candidate  CandidateProfile?
+  savedJobs  SavedJob[]
+}
+
+model Category {
+  id            String        @id @default(cuid())
+  name          String
+  slug          String        @unique
+  icon          String        @default("🏪")
+  order         Int           @default(0)
+  subcategories Subcategory[]
+  businesses    Business[]
+}
+
+model Subcategory {
+  id         String     @id @default(cuid())
+  name       String
+  slug       String
+  categoryId String
+  category   Category   @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  businesses Business[]
+
+  @@unique([categoryId, slug])
+}
+
+/// Estados del comercio: PENDING | IN_REVIEW | VERIFIED | REJECTED | SUSPENDED
+model Business {
+  id            String       @id @default(cuid())
+  ownerId       String
+  owner         User         @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  name          String
+  categoryId    String
+  category      Category     @relation(fields: [categoryId], references: [id])
+  subcategoryId String?
+  subcategory   Subcategory? @relation(fields: [subcategoryId], references: [id])
+  description   String       @default("")
+  address       String
+  neighborhood  String?
+  municipality  String       @default("Mosquera")
+  lat           Float?
+  lng           Float?
+  phone         String
+  whatsapp      String?
+  schedule      String?
+  instagram     String?
+  facebook      String?
+  website       String?
+  logoUrl       String?
+  status        String       @default("PENDING")
+  rejectionNote String?
+  featured      Boolean      @default(false)
+  ratingAvg     Float        @default(0)
+  ratingCount   Int          @default(0)
+  views         Int          @default(0)
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  photos     BusinessPhoto[]
+  promotions Promotion[]
+  products   Product[]
+  ratings    Rating[]
+  favorites  Favorite[]
+
+  @@index([categoryId])
+  @@index([status])
+}
+
+/// type: FACADE | SIGN | INTERIOR | GALLERY
+model BusinessPhoto {
+  id         String   @id @default(cuid())
+  businessId String
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  url        String
+  type       String   @default("GALLERY")
+}
+
+model Promotion {
+  id          String    @id @default(cuid())
+  businessId  String
+  business    Business  @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  title       String
+  description String    @default("")
+  discount    Int?
+  startDate   DateTime?
+  endDate     DateTime?
+  imageUrl    String?
+  active      Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+}
+
+model Product {
+  id          String   @id @default(cuid())
+  businessId  String
+  business    Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  name        String
+  description String   @default("")
+  price       Int?
+  imageUrl    String?
+}
+
+/// Calificación de comercios o prestadores de servicio
+model Rating {
+  id         String           @id @default(cuid())
+  userId     String
+  user       User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  businessId String?
+  business   Business?        @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  providerId String?
+  provider   ServiceProvider? @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  stars      Int
+  comment    String?
+  createdAt  DateTime         @default(now())
+}
+
+/// Reportes ciudadanos. targetType: BUSINESS | PROPERTY | SERVICE | JOB
+/// status: OPEN | REVIEWED | DISMISSED
+model Report {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  targetType String
+  targetId   String
+  reason     String
+  detail     String?
+  status     String   @default("OPEN")
+  createdAt  DateTime @default(now())
+}
+
+/// type: NEWS | BULLETIN | OFFICIAL | ALERT | EVENT
+model News {
+  id           String   @id @default(cuid())
+  title        String
+  body         String
+  type         String   @default("NEWS")
+  imageUrl     String?
+  municipality String   @default("Mosquera")
+  authorId     String?
+  author       User?    @relation(fields: [authorId], references: [id])
+  publishedAt  DateTime @default(now())
+}
+
+model EmergencyContact {
+  id           String @id @default(cuid())
+  name         String
+  phone        String
+  icon         String @default("📞")
+  municipality String @default("Mosquera")
+  order        Int    @default(0)
+}
+
+/// CundiEspacios. offerType: RENT | SALE | SWAP. status: ACTIVE | RESERVED | CLOSED
+model Property {
+  id                String          @id @default(cuid())
+  userId            String
+  user              User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  offerType         String
+  propertyType      String
+  municipality      String          @default("Mosquera")
+  neighborhood      String?
+  address           String?
+  area              Int?
+  rooms             Int?
+  bathrooms         Int?
+  parking           Boolean         @default(false)
+  stratum           Int?
+  price             Int?
+  paymentConditions String?
+  description       String          @default("")
+  services          String?
+  ownerName         String
+  phone             String
+  whatsapp          String?
+  status            String          @default("ACTIVE")
+  verified          Boolean         @default(false)
+  createdAt         DateTime        @default(now())
+  photos            PropertyPhoto[]
+}
+
+model PropertyPhoto {
+  id         String   @id @default(cuid())
+  propertyId String
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  url        String
+}
+
+/// CundiServicios - prestador de servicios
+model ServiceProvider {
+  id              String         @id @default(cuid())
+  userId          String
+  user            User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  providerName    String
+  category        String
+  serviceType     String
+  municipality    String         @default("Mosquera")
+  coverageZone    String?
+  description     String         @default("")
+  yearsExperience Int?
+  phone           String
+  whatsapp        String?
+  photoUrl        String?
+  verified        Boolean        @default(false)
+  ratingAvg       Float          @default(0)
+  ratingCount     Int            @default(0)
+  createdAt       DateTime       @default(now())
+  photos          ServicePhoto[]
+  ratings         Rating[]
+}
+
+model ServicePhoto {
+  id         String          @id @default(cuid())
+  providerId String
+  provider   ServiceProvider @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  url        String
+}
+
+/// CundiEmpleo
+model Job {
+  id           String     @id @default(cuid())
+  userId       String
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  companyName  String
+  sector       String
+  title        String
+  contractType String
+  workday      String?
+  salary       Int?
+  functions    String     @default("")
+  requirements String     @default("")
+  experience   String?
+  municipality String     @default("Mosquera")
+  address      String?
+  phone        String?
+  email        String?
+  whatsapp     String?
+  active       Boolean    @default(true)
+  createdAt    DateTime   @default(now())
+  applications SavedJob[]
+}
+
+model SavedJob {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  jobId     String
+  job       Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  applied   Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, jobId])
+}
+
+model CandidateProfile {
+  id         String  @id @default(cuid())
+  userId     String  @unique
+  user       User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  experience String?
+  skills     String?
+  education  String?
+  cvUrl      String?
+}
+
+model Favorite {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  businessId String
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+
+  @@unique([userId, businessId])
+}

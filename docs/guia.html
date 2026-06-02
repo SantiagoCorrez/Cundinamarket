@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<title>CundiMarket — Guía de Producto y Propuesta</title>
+<style>
+  :root{
+    --brand:#c2f92c; --brand-strong:#a8e000; --ink:#0f1419; --soft:#5b6470;
+    --faint:#9aa3af; --line:#e6e8ec; --bg:#f3f4f6;
+    --success:#1faa59; --warn:#f0a500; --danger:#e23b3b; --info:#2f80ed;
+  }
+  @page { size: A4; margin: 0; }
+  *{ box-sizing:border-box; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  html,body{ margin:0; padding:0; font-family:"Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif; color:var(--ink); }
+  .page{ width:210mm; height:297mm; padding:14mm 14mm; position:relative; page-break-after:always; background:#fff; overflow:hidden; }
+  .page:last-child{ page-break-after:auto; }
+  h1,h2,h3,h4{ margin:0; line-height:1.15; }
+  p{ line-height:1.5; }
+  .muted{ color:var(--soft); }
+  .faint{ color:var(--faint); }
+  .lime{ color:var(--brand-strong); }
+  .kicker{ font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--brand-strong); font-weight:700; }
+  .h-sec{ font-size:23px; font-weight:800; margin-top:5px; }
+  .lead{ font-size:13px; color:var(--soft); margin-top:9px; max-width:62ch; }
+  .rule{ height:4px; width:50px; background:var(--brand); border-radius:4px; margin:11px 0 16px; }
+  .tag{ display:inline-block; background:var(--ink); color:#fff; border-radius:999px; padding:5px 12px; font-size:11px; font-weight:600; }
+  .pill{ display:inline-block; border-radius:999px; padding:4px 10px; font-size:10.5px; font-weight:700; }
+  .pill.lime{ background:rgba(194,249,44,.25); color:#3c5a00; }
+  .pill.ok{ background:rgba(31,170,89,.15); color:var(--success); }
+
+  /* Cover */
+  .cover{ background:var(--ink); color:#fff; display:flex; flex-direction:column; }
+  .cover .logo{ display:flex; align-items:center; gap:10px; font-weight:800; font-size:20px; }
+  .cover .big{ font-size:54px; font-weight:800; letter-spacing:-1px; line-height:1.02; margin-top:auto; }
+  .cover .big span{ color:var(--brand); }
+  .cover .sub{ font-size:17px; color:rgba(255,255,255,.72); margin-top:16px; max-width:46ch; }
+  .cover .meta{ margin-top:26px; display:flex; gap:10px; flex-wrap:wrap; }
+  .cover .chip{ border:1px solid rgba(255,255,255,.22); border-radius:999px; padding:7px 14px; font-size:12px; color:#fff; }
+  .cover .foot{ margin-top:34px; padding-top:18px; border-top:1px solid rgba(255,255,255,.14); font-size:12px; color:rgba(255,255,255,.6); display:flex; justify-content:space-between; }
+  .cover .hero-phones{ display:flex; gap:14px; margin-top:40px; }
+
+  /* Phone mockup */
+  .phone{ width:168px; border:6px solid #0b0e12; border-radius:22px; overflow:hidden; box-shadow:0 14px 32px rgba(15,20,25,.2); background:#0b0e12; flex:0 0 auto; }
+  .phone img{ display:block; width:100%; }
+  .hero-phones .phone{ width:188px; }
+  .phone.sm{ width:150px; border-width:6px; border-radius:20px; }
+
+  /* Grids */
+  .grid{ display:flex; flex-wrap:wrap; gap:18px; }
+  .mock{ text-align:center; }
+  .mock .cap{ font-size:11.5px; font-weight:700; margin-top:8px; }
+  .mock .desc{ font-size:10px; color:var(--soft); margin-top:2px; max-width:150px; margin-left:auto; margin-right:auto; }
+  .row3{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; align-items:start; }
+  .row2{ display:grid; grid-template-columns:repeat(2,1fr); gap:18px; align-items:start; }
+
+  /* Browser frame for admin */
+  .browser{ border:1px solid var(--line); border-radius:14px; overflow:hidden; box-shadow:0 12px 30px rgba(15,20,25,.12); }
+  .browser .bar{ background:#e9ebef; padding:9px 12px; display:flex; gap:6px; align-items:center; }
+  .browser .bar i{ width:10px; height:10px; border-radius:50%; display:inline-block; }
+  .browser .bar .u{ margin-left:10px; background:#fff; border-radius:6px; font-size:10px; color:var(--soft); padding:3px 10px; }
+  .browser img{ display:block; width:100%; }
+
+  /* Cards */
+  .cards{ display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin-top:8px; }
+  .card{ border:1px solid var(--line); border-radius:16px; padding:16px; background:#fff; }
+  .card .ic{ width:38px; height:38px; border-radius:11px; background:var(--bg); display:flex; align-items:center; justify-content:center; font-size:20px; }
+  .card h4{ font-size:14px; margin-top:10px; }
+  .card p{ font-size:11.5px; color:var(--soft); margin:5px 0 0; }
+  .feat{ display:flex; gap:10px; margin:9px 0; }
+  .feat .dot{ flex:0 0 auto; width:20px; height:20px; border-radius:50%; background:var(--brand); color:var(--ink); font-weight:800; font-size:11px; display:flex; align-items:center; justify-content:center; }
+  .feat .t{ font-size:12.5px; }
+  .feat .t b{ display:block; }
+  .feat .t span{ color:var(--soft); }
+
+  .flow{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-top:10px; }
+  .flow .step{ background:var(--bg); border:1px solid var(--line); border-radius:999px; padding:6px 12px; font-size:11px; font-weight:600; }
+  .flow .arr{ color:var(--faint); font-weight:700; }
+
+  table.tbl{ width:100%; border-collapse:collapse; margin-top:10px; font-size:12px; }
+  table.tbl th{ text-align:left; background:var(--ink); color:#fff; padding:9px 12px; font-size:11px; }
+  table.tbl td{ padding:9px 12px; border-bottom:1px solid var(--line); }
+  table.tbl tr:nth-child(even) td{ background:#fafbfc; }
+  .price{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:12px; }
+  .plan{ border:1px solid var(--line); border-radius:18px; padding:18px; }
+  .plan.hl{ border:2px solid var(--ink); background:var(--ink); color:#fff; }
+  .plan .name{ font-size:13px; font-weight:700; }
+  .plan .amt{ font-size:26px; font-weight:800; margin:8px 0; }
+  .plan.hl .amt{ color:var(--brand); }
+  .plan ul{ margin:8px 0 0; padding-left:16px; font-size:11px; color:var(--soft); }
+  .plan.hl ul{ color:rgba(255,255,255,.8); }
+
+  .pagenum{ position:absolute; bottom:10mm; right:16mm; font-size:10px; color:var(--faint); }
+  .pagemark{ position:absolute; bottom:10mm; left:16mm; font-size:10px; color:var(--faint); font-weight:700; }
+  .pagemark span{ color:var(--brand-strong); }
+  .note{ background:rgba(194,249,44,.14); border:1px solid rgba(168,224,0,.4); border-radius:14px; padding:14px 16px; font-size:12px; color:#3c4a16; margin-top:14px; }
+</style>
+</head>
+<body>
+
+<!-- ===================== PORTADA ===================== -->
+<section class="page cover">
+  <div class="logo">
+    <svg width="34" height="34" viewBox="0 0 64 64"><rect width="64" height="64" rx="16" fill="#c2f92c"/><path d="M32 14c-7.2 0-13 5.6-13 12.6 0 8.8 11 21 12.2 22.3a1.1 1.1 0 0 0 1.6 0C34 47.6 45 35.4 45 26.6 45 19.6 39.2 14 32 14Z" fill="#0f1419"/><path d="M26.5 24h11l-.9 9.2a2 2 0 0 1-2 1.8h-5.2a2 2 0 0 1-2-1.8L26.5 24Z" fill="#c2f92c"/></svg>
+    Cundi<span style="color:var(--brand)">Market</span>
+  </div>
+
+  <div class="big">La plataforma<br/>que conecta tu<br/><span>municipio.</span></div>
+  <div class="sub">Comercios, inmuebles, servicios, empleo y noticias locales en una sola aplicación. Guía de producto y propuesta de desarrollo.</div>
+
+  <div class="hero-phones">
+    <div class="phone"><img src="shots/02-home.png" alt="Home"/></div>
+    <div class="phone"><img src="shots/05-business.png" alt="Comercio"/></div>
+    <div class="phone"><img src="shots/06-espacios.png" alt="CundiEspacios"/></div>
+  </div>
+
+  <div class="meta">
+    <span class="chip">📍 Piloto: Mosquera</span>
+    <span class="chip">🌎 Escalable a Cundinamarca</span>
+    <span class="chip">📱 iOS · Android · Web (PWA)</span>
+  </div>
+
+  <div class="foot">
+    <span>Documento de producto · v1.0</span>
+    <span>29 de mayo de 2026</span>
+  </div>
+</section>
+
+<!-- ===================== RESUMEN ===================== -->
+<section class="page">
+  <div class="kicker">Resumen ejecutivo</div>
+  <div class="h-sec">Un ecosistema digital para el comercio local</div>
+  <div class="rule"></div>
+
+  <p class="muted">CundiMarket es un <b>directorio digital inteligente</b> que centraliza la oferta comercial y de servicios de un municipio. Los comercios se registran <b>gratis</b> y publican su información; los ciudadanos encuentran negocios, promociones, inmuebles, servicios, empleo y noticias oficiales — todo desde el celular.</p>
+
+  <div class="cards">
+    <div class="card"><div class="ic">🏪</div><h4>Fortalece el comercio local</h4><p>Da visibilidad digital a tiendas y emprendimientos del municipio, sin costo de entrada.</p></div>
+    <div class="card"><div class="ic">🤝</div><h4>Conecta a la comunidad</h4><p>Ciudadanos, comerciantes, propietarios, técnicos y empresas en un mismo lugar.</p></div>
+    <div class="card"><div class="ic">✔</div><h4>Genera confianza</h4><p>Proceso de verificación de comercios con sello visible que reduce fraudes.</p></div>
+    <div class="card"><div class="ic">🏛️</div><h4>Acerca lo institucional</h4><p>Noticias, alertas y canales de atención municipal al alcance de un toque.</p></div>
+  </div>
+
+  <div class="note"><b>Estado actual:</b> producto funcional construido y navegable (app ciudadana, flujo de comerciante con verificación, 3 módulos, noticias, canales de atención, chatbot y panel administrativo web con analítica). Listo para piloto en Mosquera.</div>
+
+  <div style="margin-top:18px" class="row3">
+    <div><div style="font-size:30px;font-weight:800" class="lime">6</div><div class="muted" style="font-size:12px">módulos integrados</div></div>
+    <div><div style="font-size:30px;font-weight:800" class="lime">2</div><div class="muted" style="font-size:12px">tipos de usuario + admin</div></div>
+    <div><div style="font-size:30px;font-weight:800" class="lime">100%</div><div class="muted" style="font-size:12px">mobile-first / instalable</div></div>
+  </div>
+
+  <div class="pagemark">Cundi<span>Market</span></div>
+  <div class="pagenum">02</div>
+</section>
+
+<!-- ===================== PROBLEMA / SOLUCIÓN ===================== -->
+<section class="page">
+  <div class="kicker">El problema y la oportunidad</div>
+  <div class="h-sec">El comercio local es invisible en lo digital</div>
+  <div class="rule"></div>
+
+  <div class="row2">
+    <div>
+      <h4 style="font-size:14px">Hoy</h4>
+      <div class="feat"><div class="dot" style="background:#ffd9d9;color:#b00">!</div><div class="t"><b>Negocios sin presencia digital</b><span>Dependen del voz a voz; difícil que nuevos clientes los encuentren.</span></div></div>
+      <div class="feat"><div class="dot" style="background:#ffd9d9;color:#b00">!</div><div class="t"><b>Información dispersa</b><span>Horarios, contactos y promociones en grupos de WhatsApp y volantes.</span></div></div>
+      <div class="feat"><div class="dot" style="background:#ffd9d9;color:#b00">!</div><div class="t"><b>Desconfianza</b><span>Anuncios falsos de arriendos, servicios y empleos.</span></div></div>
+      <div class="feat"><div class="dot" style="background:#ffd9d9;color:#b00">!</div><div class="t"><b>Brecha institución–ciudadano</b><span>Avisos oficiales que no llegan a tiempo.</span></div></div>
+    </div>
+    <div>
+      <h4 style="font-size:14px">Con CundiMarket</h4>
+      <div class="feat"><div class="dot">✓</div><div class="t"><b>Ficha digital gratuita</b><span>Cada comercio con perfil, fotos, catálogo y contacto directo.</span></div></div>
+      <div class="feat"><div class="dot">✓</div><div class="t"><b>Todo centralizado</b><span>Buscar, filtrar y contactar por llamada o WhatsApp en segundos.</span></div></div>
+      <div class="feat"><div class="dot">✓</div><div class="t"><b>Verificación y reportes</b><span>Sello de confianza y moderación desde el panel admin.</span></div></div>
+      <div class="feat"><div class="dot">✓</div><div class="t"><b>Canal municipal</b><span>Noticias, alertas y teléfonos de emergencia integrados.</span></div></div>
+    </div>
+  </div>
+
+  <div class="kicker" style="margin-top:26px">La plataforma en 6 secciones</div>
+  <div class="cards" style="grid-template-columns:repeat(3,1fr)">
+    <div class="card"><div class="ic">🏪</div><h4>Comercios</h4><p>Directorio por categorías con verificación.</p></div>
+    <div class="card"><div class="ic">🏠</div><h4>CundiEspacios</h4><p>Inmuebles: arriendo, venta y permuta.</p></div>
+    <div class="card"><div class="ic">🛠️</div><h4>CundiServicios</h4><p>Técnicos, oficios y profesionales.</p></div>
+    <div class="card"><div class="ic">💼</div><h4>CundiEmpleo</h4><p>Bolsa de empleo municipal.</p></div>
+    <div class="card"><div class="ic">📰</div><h4>Noticias</h4><p>Información oficial y alertas.</p></div>
+    <div class="card"><div class="ic">🚨</div><h4>Atención</h4><p>Líneas de emergencia del municipio.</p></div>
+  </div>
+
+  <div class="pagemark">Cundi<span>Market</span></div>
+  <div class="pagenum">03</div>
+</section>
+
+<!-- ===================== RECORRIDO 1: ACCESO E INICIO ===================== -->
+<section class="page">
+  <div class="kicker">Recorrido por la app · 1</div>
+  <div class="h-sec">Acceso e inicio</div>
+  <div class="rule"></div>
+  <p class="muted" style="margin-top:0">Onboarding claro, registro con rol (ciudadano o comerciante) y una pantalla de inicio que invita a descubrir el municipio.</p>
+
+  <div class="row3" style="margin-top:18px">
+    <div class="mock"><div class="phone"><img src="shots/01-welcome.png"/></div><div class="cap">Bienvenida</div><div class="desc">Onboarding con propuesta de valor</div></div>
+    <div class="mock"><div class="phone"><img src="shots/16-login.png"/></div><div class="cap">Acceso</div><div class="desc">Login / registro por rol</div></div>
+    <div class="mock"><div class="phone"><img src="shots/02-home.png"/></div><div class="cap">Inicio</div><div class="desc">Buscador, categorías, módulos, destacados y promos</div></div>
+  </div>
+
+  <div class="row3" style="margin-top:16px">
+    <div class="mock"><div class="phone"><img src="shots/04-categories.png"/></div><div class="cap">Categorías</div><div class="desc">10 categorías con subcategorías</div></div>
+    <div class="mock"><div class="phone"><img src="shots/03-search.png"/></div><div class="cap">Búsqueda + filtros</div><div class="desc">Abiertos, mejor calificados, promociones, verificados</div></div>
+    <div class="mock"><div class="phone"><img src="shots/17-profile.png"/></div><div class="cap">Perfil</div><div class="desc">Favoritos, accesos por rol y sesión</div></div>
+  </div>
+
+  <div class="pagemark">Cundi<span>Market</span></div>
+  <div class="pagenum">04</div>
+</section>
+
+<!-- ===================== RECORRIDO 2: COMERCIO Y VERIFICACIÓN ===================== -->
+<section class="page">
+  <div class="kicker">Recorrido por la app · 2</div>
+  <div class="h-sec">Ficha de comercio y verificación</div>
+  <div class="rule"></div>
+
+  <div class="row2" style="margin-top:8px">
+    <div class="grid" style="gap:14px;justify-content:center">
+      <div class="mock"><div class="phone"><img src="shots/05-business.png"/></div><div class="cap">Ficha pública del comercio</div></div>
+      <div class="mock"><div class="phone"><img src="shots/18-merchant-nuevo.png"/></div><div class="cap">Registro + evidencias</div></div>
+    </div>
+    <div>
+      <h4 style="font-size:14px">Ficha completa</h4>
+      <p class="muted" style="font-size:12px">Logo, galería, horario, descripción, promociones vigentes, menú/catálogo, calificaciones y contacto por <b>llamada</b> y <b>WhatsApp</b>. Botón de <b>favorito</b> y <b>reporte ciudadano</b>.</p>
+
+      <h4 style="font-size:14px;margin-top:16px">Proceso de verificación</h4>
+      <p class="muted" style="font-size:12px">El comerciante registra el negocio y sube evidencias (fachada, aviso, interior). El equipo administrador valida y aprueba; el comercio obtiene el sello <span class="pill ok">✔ Verificado</span></p>
+
+      <div class="flow">
+        <span class="step">Registro</span><span class="arr">→</span>
+        <span class="step">Evidencias</span><span class="arr">→</span>
+        <span class="step">En verificación</span><span class="arr">→</span>
+        <span class="step">Revisión admin</span><span class="arr">→</span>
+        <span class="step" style="background:var(--brand);border-color:var(--brand-strong)">✔ Verificado</span>
+      </div>
+
+      <div class="note" style="margin-top:16px">El sello aparece en resultados de búsqueda, ficha y perfil, generando confianza inmediata en los ciudadanos.</div>
+    </div>
+  </div>
+
+  <div class="pagemark">Cundi<span>Market</span></div>
+  <div class="pagenum">05</div>
+</section>
+
+<!-- ===================== RECORRIDO 3: COMERCIANTE ===================== -->
+<section class="page">
+  <div class="kicker">Recorrido por la app · 3</div>
+  <div class="h-sec">Panel del comerciante</div>
+  <div class="rule"></div>
+  <p class="muted" style="margin-top:0">El comerciante administra sus negocios, ve el estado de verificación y publica promociones y productos — todo desde el celular.</p>
+
+  <div class="row3" style="margin-top:18px">
+    <div class="mock"><div class="phone"><img src="shots/19-merchant-dash.png"/></div><div class="cap">Mis negocios</div><div class="desc">Estado de verificación por comercio</div></div>
+    <div class="mock"><div class="phone"><img src="shots/18-merchant-nuevo.png"/></div><div class="cap">Registrar negocio</div><div class="desc">Información + evidencias en un flujo</div></div>
+    <div>
+      <h4 style="font-size:14px">Capacidades</h4>
+      <div class="feat"><div class="dot">✓</div><div class="t">Crear y editar perfil comercial</div></div>
+      <div class="feat"><div class="dot">✓</div><div class="t">Subir fotos y logo</div></div>
+      <div class="feat"><div class="dot">✓</div><div class="t">Publicar promociones (con % descuento)</div></div>
+      <div class="feat"><div class="dot">✓</div><div class="t">Gestionar menú / catálogo</div></div>
+      <div class="feat"><div class="dot">✓</div><div class="t">Ver estado y notas de verificación</div></div>
+      <div class="feat"><div class="dot">✓</div><div class="t">Re-verificación al cambiar datos clave</div></div>
+    </div>
+  </div>
+
+  <div class="pagemark">Cundi<span>Market</span></div>
+  <div class="pagenum">06</div>
+</section>
+
+<!-- ===================== RECORRIDO 4: MÓDULOS ===================== -->
+<section class="page">
+  <div class="kicker">Recorrido por la app · 4</div>
+  <div class="h-sec">Módulos: Espacios, Servicios y Empleo</div>
+  <div class="rule"></div>
+
+  <div class="row3" style="margin-top:14px">
+    <div class="mock"><div class="phone"><img src="shots/06-espacios.png"/></div><div class="cap">🏠 CundiEspacios</div><div class="desc">Arriendo · Venta · Permuta</div></div>
+    <div class="mock"><div class="phone"><img src="shots/08-servicios.png"/></div><div class="cap">🛠️ CundiServicios</div><div class="desc">Técnicos y profesionales</div></div>
+    <div class="mock"><div class="phone"><img src="shots/10-empleo.png"/></div><div class="cap">💼 CundiEmpleo</div><div class="desc">Vacantes locales</div></div>
+  </div>
+
+  <div class="row3" style="margin-top:16px">
+    <div class="mock"><div class="phone"><img src="shots/07-espacios-detail.png"/></div><div class="cap">Detalle de inmueble</div><div class="desc">Galería, características y contacto</div></div>
+    <div class="mock"><div class="phone"><img src="shots/09-servicios-detail.png"/></div><div class="cap">Perfil del prestador</div><div class="desc">Experiencia y calificación</div></div>
+    <div class="mock"><div class="phone"><img src="shots/11-empleo-detail.png"/></div><div class="cap">Detalle de vacante</div><div class="desc">Postulación y contacto</div></div>
+  </div>
+
+  <div class="pagemark">Cundi<span>Market</span></div>
+  <div class="pagenum">07</div>
+</section>
+
+<!-- ===================== RECORRIDO 5: MUNICIPIO + CHATBOT ===================== -->
+<section class="page">
+  <div class="kicker">Recorrido por la app · 5</div>
+  <div class="h-sec">Información municipal y asistente</div>
+  <div class="rule"></div>
+
+  <div class="row3" style="margin-top:14px">
+    <div class="mock"><div class="phone"><img src="shots/12-news.png"/></div><div class="cap">Noticias</div><div class="desc">Noticias, alertas y comunicados</div></div>
+    <div class="mock"><div class="phone"><img src="shots/13-news-detail.png"/></div><div class="cap">Detalle de noticia</div><div class="desc">Contenido oficial del municipio</div></div>
+    <div class="mock"><div class="phone"><img src="shots/14-emergency.png"/></div><div class="cap">Canales de atención</div><div class="desc">Llamada directa a emergencias</div></div>
+  </div>
+
+  <div class="row2" style="margin-top:16px;align-items:center">
+    <div class="mock"><div class="phone" style="margin:0 auto"><img src="shots/15-chatbot.png"/></div><div class="cap">Asistente CundiBot</div></div>
+    <div>
+      <h4 style="font-size:14px">CundiBot — asistente inteligente</h4>
+      <p class="muted" style="font-size:12px">Orienta al ciudadano con lenguaje natural: encuentra comercios por categoría, muestra promociones activas y enlaza a los módulos. Funciona sobre la información real de la plataforma.</p>
+      <div class="note">Base lista para conectar un modelo de IA (Claude) y respuestas conversacionales avanzadas en la siguiente fase.</div>
+    </div>
+  </div>
+
+  <div class="pagemark">Cundi<span>Market</span></div>
+  <div class="pagenum">08</div>
+</section>
+
+<!-- ===================== PANEL ADMIN ===================== -->
+<section class="page">
+  <div class="kicker">Recorrido · Panel administrativo web</div>
+  <div class="h-sec">Control total para el municipio</div>
+  <div class="rule"></div>
+  <p class="muted" style="margin-top:0">Panel web para funcionarios: analítica en tiempo real, verificación de comercios, moderación de reportes y gestión de noticias, categorías y canales de atención.</p>
+
+  <div class="browser" style="margin-top:14px">
+    <div class="bar"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i><span class="u">cundimarket.co/admin</span></div>
+    <img src="shots/20-admin-dash.png"/>
+  </div>
+
+  <div class="row2" style="margin-top:18px">
+    <div class="browser"><div class="bar"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i><span class="u">/admin/comercios</span></div><img src="shots/21-admin-comercios.png"/></div>
+    <div class="browser"><div class="bar"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i><span class="u">/admin/noticias</span></div><img src="shots/22-admin-noticias.png"/></div>
+  </div>
+
+  <div class="cards" style="grid-template-columns:repeat(4,1fr);margin-top:16px">
+    <div class="card"><h4 style="font-size:12px">📊 Analítica</h4><p>Comercios, usuarios, módulos, top categorías y más visitados.</p></div>
+    <div class="card"><h4 style="font-size:12px">✔ Verificación</h4><p>Aprobar, rechazar, suspender y destacar comercios.</p></div>
+    <div class="card"><h4 style="font-size:12px">🚩 Moderación</h4><p>Reportes ciudadanos y suspensión de publicaciones.</p></div>
+    <div class="card"><h4 style="font-size:12px">📰 Contenido</h4><p>Noticias, categorías y canales de atención.</p></div>
+  </div>
+
+  <div class="pagemark">Cundi<span>Market</span></div>
+  <div class="pagenum">09</div>
+</section>
+
+<!-- ===================== TECNOLOGÍA ===================== -->
+<section class="page">
+  <div class="kicker">Bajo el capó</div>
+  <div class="h-sec">Arquitectura y tecnología</div>
+  <div class="rule"></div>
+
+  <div class="row2">
+    <div>
+      <h4 style="font-size:14px">Stack actual</h4>
+      <div class="feat"><div class="dot">⚙</div><div class="t"><b>Next.js 16 + React 19</b><span>App web/PWA mobile-first, instalable, rápida.</span></div></div>
+      <div class="feat"><div class="dot">⚙</div><div class="t"><b>API + lógica de negocio</b><span>Server Actions y endpoints; arquitectura modular.</span></div></div>
+      <div class="feat"><div class="dot">⚙</div><div class="t"><b>Base de datos (Prisma)</b><span>SQLite en piloto, migrable a PostgreSQL en la nube.</span></div></div>
+      <div class="feat"><div class="dot">⚙</div><div class="t"><b>Autenticación segura</b><span>JWT en cookie httpOnly, contraseñas con hash, roles.</span></div></div>
+    </div>
+    <div>
+      <h4 style="font-size:14px">Principios</h4>
+      <div class="feat"><div class="dot">🔒</div><div class="t"><b>Seguridad y datos</b><span>HTTPS, control por roles; alineado a la Ley 1581 de 2012.</span></div></div>
+      <div class="feat"><div class="dot">📈</div><div class="t"><b>Escalabilidad</b><span>De un municipio (Mosquera) a todo Cundinamarca.</span></div></div>
+      <div class="feat"><div class="dot">🧩</div><div class="t"><b>Modular</b><span>Cada sección (comercios, espacios, servicios, empleo) es independiente.</span></div></div>
+      <div class="feat"><div class="dot">📱</div><div class="t"><b>Multiplataforma</b><span>Web hoy; base lista para apps nativas iOS/Android.</span></div></div>
+    </div>
+  </div>
+
+  <div class="kicker" style="margin-top:22px">Integraciones externas (previstas)</div>
+  <div class="cards" style="grid-template-columns:repeat(3,1fr)">
+    <div class="card"><div class="ic">🗺️</div><h4>Google Maps</h4><p>Ubicación, rutas y alertas de tráfico para salidas del municipio.</p></div>
+    <div class="card"><div class="ic">💬</div><h4>WhatsApp</h4><p>Contacto directo comercio–ciudadano (ya integrado en la app).</p></div>
+    <div class="card"><div class="ic">🔔</div><h4>Notificaciones push</h4><p>Firebase Cloud Messaging para promociones, noticias y alertas.</p></div>
+  </div>
+
+  <div class="pagemark">Cundi<span>Market</span></div>
+  <div class="pagenum">10</div>
+</section>
+
+<!-- ===================== ROADMAP ===================== -->
+<section class="page">
+  <div class="kicker">Próximos días · Roadmap</div>
+  <div class="h-sec">Mejoras que podemos implementar</div>
+  <div class="rule"></div>
+
+  <table class="tbl">
+    <tr><th style="width:34%">Mejora</th><th style="width:18%">Esfuerzo</th><th>Beneficio</th></tr>
+    <tr><td><b>Mapa con Google Maps</b></td><td><span class="pill lime">Medio</span></td><td>Ver comercios en mapa, rutas y alertas de tráfico.</td></tr>
+    <tr><td><b>Notificaciones push (FCM)</b></td><td><span class="pill lime">Medio</span></td><td>Avisar promociones, noticias y alertas en tiempo real.</td></tr>
+    <tr><td><b>Migración a PostgreSQL en la nube</b></td><td><span class="pill lime">Bajo</span></td><td>Producción real, respaldos y multi-municipio.</td></tr>
+    <tr><td><b>Almacenamiento de imágenes (S3/Cloudinary)</b></td><td><span class="pill lime">Bajo</span></td><td>Galerías más rápidas y optimizadas.</td></tr>
+    <tr><td><b>Chatbot con IA (Claude)</b></td><td><span class="pill lime">Medio</span></td><td>Recomendaciones conversacionales y soporte 24/7.</td></tr>
+    <tr><td><b>Apps nativas iOS/Android (Expo)</b></td><td><span class="pill lime">Alto</span></td><td>Presencia en tiendas y mejor experiencia móvil.</td></tr>
+    <tr><td><b>Verificación por documento/NIT</b></td><td><span class="pill lime">Medio</span></td><td>Mayor confianza y validez legal del comercio.</td></tr>
+    <tr><td><b>Reseñas con fotos y respuestas</b></td><td><span class="pill lime">Bajo</span></td><td>Más reputación y engagement.</td></tr>
+    <tr><td><b>Pagos / planes destacados</b></td><td><span class="pill lime">Medio</span></td><td>Monetización: comercios pagan por posicionarse.</td></tr>
+    <tr><td><b>Panel de métricas para el comerciante</b></td><td><span class="pill lime">Bajo</span></td><td>Vistas, contactos y conversión de su negocio.</td></tr>
+  </table>
+
+  <div class="note" style="margin-top:18px"><b>Recomendación de priorización:</b> 1) Mapa + 2) Notificaciones push + 3) Migración a Postgres y almacenamiento de imágenes → con esto el producto queda listo para lanzamiento público. Luego apps nativas y monetización.</div>
+
+  <div class="pagemark">Cundi<span>Market</span></div>
+  <div class="pagenum">11</div>
+</section>
+
+<!-- ===================== MODELO DE NEGOCIO / OFERTA ===================== -->
+<section class="page">
+  <div class="kicker">Cómo ofrecer el desarrollo</div>
+  <div class="h-sec">Modelo de negocio y paquetes</div>
+  <div class="rule"></div>
+
+  <p class="muted" style="margin-top:0">CundiMarket puede ofrecerse a <b>alcaldías</b> (servicio a la comunidad), a <b>cámaras de comercio</b> o como <b>emprendimiento privado</b> con ingresos por destacados y publicidad local. Sugerencia de paquetes:</p>
+
+  <div class="price">
+    <div class="plan">
+      <div class="name">PILOTO</div>
+      <div class="amt">Mosquera</div>
+      <div class="muted" style="font-size:11px">Puesta en marcha</div>
+      <ul>
+        <li>Plataforma completa</li>
+        <li>Carga inicial de comercios</li>
+        <li>Capacitación básica</li>
+        <li>Soporte 1 mes</li>
+      </ul>
+    </div>
+    <div class="plan hl">
+      <div class="name">MUNICIPAL</div>
+      <div class="amt">Lanzamiento</div>
+      <div style="font-size:11px;color:rgba(255,255,255,.7)">Producción + apps</div>
+      <ul>
+        <li>Mapa + push + nube</li>
+        <li>Apps iOS / Android</li>
+        <li>Chatbot con IA</li>
+        <li>Soporte y analítica</li>
+      </ul>
+    </div>
+    <div class="plan">
+      <div class="name">DEPARTAMENTAL</div>
+      <div class="amt">Escala</div>
+      <div class="muted" style="font-size:11px">Multi-municipio</div>
+      <ul>
+        <li>Todos los municipios</li>
+        <li>Panel por alcaldía</li>
+        <li>Monetización local</li>
+        <li>SLA y mantenimiento</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="kicker" style="margin-top:22px">Fuentes de ingreso</div>
+  <div class="cards" style="grid-template-columns:repeat(2,1fr)">
+    <div class="card"><h4 style="font-size:13px">⭐ Comercios destacados</h4><p>Posicionamiento preferente en búsquedas y home.</p></div>
+    <div class="card"><h4 style="font-size:13px">📢 Publicidad local</h4><p>Banners y promociones patrocinadas.</p></div>
+    <div class="card"><h4 style="font-size:13px">🏛️ Licencia a municipios</h4><p>Suscripción anual por municipio (modelo SaaS).</p></div>
+    <div class="card"><h4 style="font-size:13px">💼 Servicios premium</h4><p>Vacantes y avisos destacados para empresas.</p></div>
+  </div>
+
+  <div class="pagemark">Cundi<span>Market</span></div>
+  <div class="pagenum">12</div>
+</section>
+
+<!-- ===================== CIERRE ===================== -->
+<section class="page cover" style="justify-content:center">
+  <div class="logo" style="position:absolute;top:18mm;left:16mm">
+    <svg width="30" height="30" viewBox="0 0 64 64"><rect width="64" height="64" rx="16" fill="#c2f92c"/><path d="M32 14c-7.2 0-13 5.6-13 12.6 0 8.8 11 21 12.2 22.3a1.1 1.1 0 0 0 1.6 0C34 47.6 45 35.4 45 26.6 45 19.6 39.2 14 32 14Z" fill="#0f1419"/></svg>
+    Cundi<span style="color:var(--brand)">Market</span>
+  </div>
+  <div style="font-size:40px;font-weight:800;line-height:1.1">Conectemos a<br/>todo el municipio.</div>
+  <div class="sub" style="margin-top:18px">El producto está construido y funcionando. El siguiente paso es lanzar el piloto en Mosquera y escalar a Cundinamarca.</div>
+  <div class="meta" style="margin-top:26px">
+    <span class="chip">Demo disponible</span>
+    <span class="chip">Listo para piloto</span>
+    <span class="chip">Escalable</span>
+  </div>
+  <div class="foot" style="margin-top:40px"><span>CundiMarket · Guía de producto v1.0</span><span>Gracias.</span></div>
+</section>
+
+</body>
+</html>
