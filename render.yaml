@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: cundimarket
+    runtime: node
+    plan: free
+    region: oregon
+    buildCommand: npm ci && npm run db:migrate && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: cundimarket-db
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: NODE_ENV
+        value: production
+      - key: NEXT_TELEMETRY_DISABLED
+        value: "1"
+
+databases:
+  - name: cundimarket-db
+    plan: free
+    databaseName: cundimarket
+    region: oregon
